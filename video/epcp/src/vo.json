@@ -1,18 +1,18 @@
 {
   "title": {
-    "frames": 145,
+    "frames": 149,
     "parts": [
       0
     ]
   },
   "purpose": {
-    "frames": 393,
+    "frames": 400,
     "parts": [
       0
     ]
   },
   "limits": {
-    "frames": 386,
+    "frames": 396,
     "parts": [
       0
     ]
@@ -24,51 +24,51 @@
     ]
   },
   "circuits": {
-    "frames": 423,
+    "frames": 413,
     "parts": [
       0
     ]
   },
   "flow": {
-    "frames": 431,
+    "frames": 433,
     "parts": [
       0,
-      67,
-      114,
-      155,
-      182,
-      227,
-      282,
-      319,
-      360
+      68,
+      117,
+      158,
+      185,
+      229,
+      287,
+      324,
+      364
     ]
   },
   "cite": {
-    "frames": 107,
+    "frames": 102,
     "parts": [
       0
     ]
   },
   "retrieval": {
-    "frames": 359,
+    "frames": 375,
     "parts": [
       0
     ]
   },
   "layers": {
-    "frames": 211,
+    "frames": 207,
     "parts": [
       0
     ]
   },
   "bus": {
-    "frames": 264,
+    "frames": 260,
     "parts": [
       0
     ]
   },
   "models": {
-    "frames": 248,
+    "frames": 252,
     "parts": [
       0
     ]
@@ -80,30 +80,30 @@
     ]
   },
   "quality": {
-    "frames": 181,
+    "frames": 183,
     "parts": [
       0
     ]
   },
   "flagships": {
-    "frames": 571,
+    "frames": 563,
     "parts": [
       0,
-      51,
-      157,
-      267,
-      365,
-      471
+      57,
+      161,
+      271,
+      361,
+      458
     ]
   },
   "stack": {
-    "frames": 255,
+    "frames": 265,
     "parts": [
       0
     ]
   },
   "outro": {
-    "frames": 88,
+    "frames": 89,
     "parts": [
       0
     ]
