@@ -1,0 +1,111 @@
+{
+  "title": {
+    "frames": 145,
+    "parts": [
+      0
+    ]
+  },
+  "purpose": {
+    "frames": 393,
+    "parts": [
+      0
+    ]
+  },
+  "limits": {
+    "frames": 386,
+    "parts": [
+      0
+    ]
+  },
+  "two": {
+    "frames": 91,
+    "parts": [
+      0
+    ]
+  },
+  "circuits": {
+    "frames": 423,
+    "parts": [
+      0
+    ]
+  },
+  "flow": {
+    "frames": 431,
+    "parts": [
+      0,
+      67,
+      114,
+      155,
+      182,
+      227,
+      282,
+      319,
+      360
+    ]
+  },
+  "cite": {
+    "frames": 107,
+    "parts": [
+      0
+    ]
+  },
+  "retrieval": {
+    "frames": 359,
+    "parts": [
+      0
+    ]
+  },
+  "layers": {
+    "frames": 211,
+    "parts": [
+      0
+    ]
+  },
+  "bus": {
+    "frames": 264,
+    "parts": [
+      0
+    ]
+  },
+  "models": {
+    "frames": 248,
+    "parts": [
+      0
+    ]
+  },
+  "security": {
+    "frames": 222,
+    "parts": [
+      0
+    ]
+  },
+  "quality": {
+    "frames": 181,
+    "parts": [
+      0
+    ]
+  },
+  "flagships": {
+    "frames": 571,
+    "parts": [
+      0,
+      51,
+      157,
+      267,
+      365,
+      471
+    ]
+  },
+  "stack": {
+    "frames": 255,
+    "parts": [
+      0
+    ]
+  },
+  "outro": {
+    "frames": 88,
+    "parts": [
+      0
+    ]
+  }
+}

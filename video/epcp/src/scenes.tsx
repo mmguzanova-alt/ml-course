@@ -319,6 +319,18 @@ const BoxAt: React.FC<React.ComponentProps<typeof Box> & { delay: number }> = ({
   return <Box {...rest} p={p} h={120} />;
 };
 
+/** Continuous step index from per-step start frames: i at starts[i], i + 1 at starts[i + 1]. */
+const stepPos = (frame: number, starts: number[]) => {
+  if (frame < starts[0]) return (frame - starts[0]) / 26;
+  for (let i = starts.length - 1; i >= 0; i--) {
+    if (frame >= starts[i]) {
+      const next = starts[i + 1] ?? starts[i] + 40;
+      return i + Math.min(1, (frame - starts[i]) / (next - starts[i]));
+    }
+  }
+  return 0;
+};
+
 /* ───────────── End-to-end scenario ───────────── */
 const FLOW = [
   ["Событие", "Поступление иска", "Документ публикуется в шину событий"],
@@ -331,13 +343,13 @@ const FLOW = [
   ["С3", "Контроль перед подписанием", "Безусловные основания отмены"],
 ];
 
-export const Flow: React.FC = () => {
+export const Flow: React.FC<{ starts?: number[] }> = ({ starts }) => {
   const frame = useCurrentFrame();
   const START = 30;
   const EACH = 26;
   const W = 380;
   const GAP = 40;
-  const pos = (frame - START) / EACH;
+  const pos = starts ? stepPos(frame, starts) : (frame - START) / EACH;
   return (
     <AbsoluteFill style={{ fontFamily: SANS }}>
       <Head title="Рассмотрение дела в суде" sub="Агенты запускаются по событиям дела; результаты — судье и помощнику" />
@@ -807,12 +819,15 @@ const FLAGS = [
   { n: "пределы", unit: "не раскрываются", t: "Мировое соглашение", d: "Посредник подбирает условия, не раскрывая пределы сторон", c: "С11 · пилот" },
 ];
 
-export const Flagships: React.FC = () => {
+export const Flagships: React.FC<{ starts?: number[] }> = ({ starts: given }) => {
   const frame = useCurrentFrame();
-  const START = 20;
-  const EACH = 62;
-  const idx = Math.max(0, Math.min(FLAGS.length - 1, Math.floor((frame - START) / EACH)));
-  const local = frame - START - idx * EACH;
+  const starts = given ?? FLAGS.map((_, i) => 20 + i * 62);
+  const START = starts[0];
+  let idx = 0;
+  starts.forEach((s, i) => {
+    if (frame >= s) idx = i;
+  });
+  const local = frame - starts[idx];
   const f = FLAGS[idx];
   const p = interpolate(local, [0, 16], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
   const numeric = /^\d+$/.test(f.n);

@@ -189,15 +189,23 @@ const STEPS = [
   { icon: FileText, label: "претензии", text: "Составляет претензии: текстом и в DOCX" },
 ];
 
-export const Steps: React.FC = () => {
+export const Steps: React.FC<{ starts?: number[] }> = ({ starts: given }) => {
   const frame = useCurrentFrame();
-  const START = 50;
-  const EACH = 38;
-  const pos = (frame - START) / EACH; // continuous step index
+  const starts = given ?? STEPS.map((_, i) => 50 + i * 38);
+  const START = starts[0];
+  // Continuous step index: i at starts[i], i + 1 at starts[i + 1].
+  let pos = (frame - START) / 38;
+  for (let i = starts.length - 1; i >= 0; i--) {
+    if (frame >= starts[i]) {
+      const next = starts[i + 1] ?? starts[i] + 38;
+      pos = i + Math.min(1, (frame - starts[i]) / (next - starts[i]));
+      break;
+    }
+  }
   const current = Math.max(0, Math.min(STEPS.length - 1, Math.floor(pos)));
   const x0 = 360;
   const dx = 240;
-  const textP = interpolate(pos - Math.floor(pos), [0, 0.25], [0, 1], clamp);
+  const textP = interpolate(frame - starts[current], [0, 9], [0, 1], clamp);
   return (
     <AbsoluteFill>
       <Title sub="от рассказа до претензий">
@@ -223,7 +231,7 @@ export const Steps: React.FC = () => {
             {i < STEPS.length - 1 ? (
               <Arrow
                 d={`M ${x0 + i * dx + 72} 500 L ${x0 + (i + 1) * dx - 72} 500`}
-                delay={START + (i + 1) * EACH - 14}
+                delay={starts[i + 1] - 14}
                 dur={12}
                 color={done || pos > i + 0.6 ? C.blue : C.greyLight}
               />

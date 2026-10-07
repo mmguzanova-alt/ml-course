@@ -1,5 +1,6 @@
 import React from "react";
-import { AbsoluteFill, Sequence, interpolate, useCurrentFrame } from "remotion";
+import { AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame } from "remotion";
+import VO from "./vo.json";
 import { C, LEFT, SANS } from "./ui";
 import {
   Bus,
@@ -19,26 +20,33 @@ import {
   Title,
 } from "./scenes";
 
-type Item = { el: React.ReactNode; d: number; label?: string };
+type Item = { id: keyof typeof VO; el: React.ReactNode; d: number; label?: string };
 
-const TIMELINE: Item[] = [
-  { el: <Title />, d: 130 },
-  { el: <Purpose />, d: 210, label: "НАЗНАЧЕНИЕ" },
-  { el: <Limits />, d: 190, label: "ОГРАНИЧЕНИЯ" },
-  { el: <Statement a="Два контура." b="Один канал обмена." note="суд и стороны встречаются только в материалах дела" />, d: 110 },
-  { el: <Circuits />, d: 310, label: "КОНТУРЫ" },
-  { el: <Flow />, d: 280, label: "СКВОЗНОЙ СЦЕНАРИЙ" },
-  { el: <Statement a="Каждое утверждение —" b="со ссылкой на страницу." />, d: 105 },
-  { el: <Retrieval />, d: 260, label: "ЗНАНИЯ" },
-  { el: <Layers />, d: 220, label: "АРХИТЕКТУРА" },
-  { el: <Bus />, d: 250, label: "ШИНА АГЕНТОВ" },
-  { el: <Models />, d: 230, label: "МОДЕЛИ" },
-  { el: <Security />, d: 200, label: "БЕЗОПАСНОСТЬ" },
-  { el: <Quality />, d: 230, label: "КАЧЕСТВО" },
-  { el: <Flagships />, d: 345, label: "ФЛАГМАНСКИЕ СЦЕНАРИИ" },
-  { el: <Stack />, d: 200, label: "ТЕХНОЛОГИИ" },
-  { el: <Outro />, d: 160 },
+// Voice-over starts LEAD frames into a scene; the scene holds TAIL frames after it ends.
+const LEAD = 10;
+const TAIL = 24;
+const voStarts = (id: keyof typeof VO) => VO[id].parts.map((f) => f + LEAD);
+
+const RAW: Item[] = [
+  { id: "title", el: <Title />, d: 130 },
+  { id: "purpose", el: <Purpose />, d: 210, label: "НАЗНАЧЕНИЕ" },
+  { id: "limits", el: <Limits />, d: 190, label: "ОГРАНИЧЕНИЯ" },
+  { id: "two", el: <Statement a="Два контура." b="Один канал обмена." note="суд и стороны встречаются только в материалах дела" />, d: 110 },
+  { id: "circuits", el: <Circuits />, d: 310, label: "КОНТУРЫ" },
+  { id: "flow", el: <Flow starts={voStarts("flow").slice(1)} />, d: 280, label: "СКВОЗНОЙ СЦЕНАРИЙ" },
+  { id: "cite", el: <Statement a="Каждое утверждение —" b="со ссылкой на страницу." />, d: 105 },
+  { id: "retrieval", el: <Retrieval />, d: 260, label: "ЗНАНИЯ" },
+  { id: "layers", el: <Layers />, d: 220, label: "АРХИТЕКТУРА" },
+  { id: "bus", el: <Bus />, d: 250, label: "ШИНА АГЕНТОВ" },
+  { id: "models", el: <Models />, d: 230, label: "МОДЕЛИ" },
+  { id: "security", el: <Security />, d: 200, label: "БЕЗОПАСНОСТЬ" },
+  { id: "quality", el: <Quality />, d: 230, label: "КАЧЕСТВО" },
+  { id: "flagships", el: <Flagships starts={voStarts("flagships").slice(1)} />, d: 345, label: "ФЛАГМАНСКИЕ СЦЕНАРИИ" },
+  { id: "stack", el: <Stack />, d: 200, label: "ТЕХНОЛОГИИ" },
+  { id: "outro", el: <Outro />, d: 160 },
 ];
+
+const TIMELINE: Item[] = RAW.map((it) => ({ ...it, d: Math.max(it.d, VO[it.id].frames + LEAD + TAIL) }));
 
 const STARTS = TIMELINE.reduce<number[]>((acc, _, i) => {
   acc.push(i === 0 ? 0 : acc[i - 1] + TIMELINE[i - 1].d);
@@ -87,6 +95,9 @@ export const Video: React.FC = () => (
     {TIMELINE.map((it, i) => (
       <Sequence key={i} from={STARTS[i]} durationInFrames={it.d}>
         <SceneWrap d={it.d}>{it.el}</SceneWrap>
+        <Sequence from={LEAD} layout="none">
+          <Audio src={staticFile(`vo/${it.id}.wav`)} />
+        </Sequence>
         <Chrome item={it} index={i} />
       </Sequence>
     ))}
